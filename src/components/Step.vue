@@ -1,21 +1,29 @@
 <template>
-  <div class="step">
-    <div class="step-text">{{ step.text }}</div>
-    <div>
-      <button v-if="isActionStep" @click="$emit('next', step.next)">
+  <v-card class="step mx-auto my-2" width="fit-content" min-width="30vw">
+    <div class="step-text ma-2">{{ step.text }}</div>
+    <v-card-actions>
+      <v-btn
+        v-if="displayNext"
+        @click="$emit('next', step.next)"
+        color="primary"
+        rounded
+      >
         Next
-      </button>
+      </v-btn>
       <div v-if="isChoiceStep">
-        <button
+        <v-btn
+          class="ma-1"
           v-for="choice in step.choices"
           :key="step.id + choice.id"
           @click="$emit('next', choice.next)"
+          color="primary"
+          rounded
         >
           {{ choice.text }}
-        </button>
+        </v-btn>
       </div>
-    </div>
-  </div>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
@@ -30,6 +38,9 @@ export default {
   computed: {
     isActionStep() {
       return this.step.type === "ACTION";
+    },
+    displayNext() {
+      return this.isActionStep && this.step.next;
     },
     isChoiceStep() {
       return this.step.type === "CHOICE";
