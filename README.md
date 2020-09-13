@@ -4,6 +4,9 @@ NaVN is an open source visual novel companion. It helps to keep a trace of visua
 
 It's compatible with different type of VN (chart, flags, score ...)
 
+## Roadmap
+[Roadmap] (https://trello.com/b/QoTLdfpF/navn-roadmap)
+
 ## Contributing
 ### Project setup
 ```
