@@ -4,7 +4,7 @@
     <v-card-actions>
       <v-btn
         v-if="displayNext"
-        @click="$emit('next', step.next)"
+        @click="onChoiceClick(step)"
         color="primary"
         rounded
       >
@@ -15,7 +15,7 @@
           class="ma-1"
           v-for="choice in step.choices"
           :key="step.id + choice.id"
-          @click="$emit('next', choice.next)"
+          @click="onChoiceClick(choice)"
           color="primary"
           rounded
         >
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "Step",
   props: {
@@ -44,6 +45,15 @@ export default {
     },
     isChoiceStep() {
       return this.step.type === "CHOICE";
+    }
+  },
+  methods: {
+    ...mapActions("metrics", ["handleChoiceResult"]),
+    onChoiceClick(choice) {
+      if (choice.result) {
+        this.handleChoiceResult(choice.result);
+      }
+      this.$emit("next", choice.next);
     }
   }
 };
