@@ -16,7 +16,6 @@
 import Step from "@/components/Step";
 import FullNavigationPanel from "@/components/FullNavigationPanel";
 import { mapMutations, mapState } from "vuex";
-import chart from "@/assets/flowcharts/SG.json";
 
 const getCurrentAvailableStep = (stepId, flags, chart) => {
   const currentStep = chart.find(s => s.id === stepId);
@@ -44,8 +43,13 @@ const getCurrentAvailableStep = (stepId, flags, chart) => {
 export default {
   name: "Navigation",
   components: { Step, FullNavigationPanel },
+  props: {
+    slug: {
+      type: String,
+      default: ""
+    }
+  },
   data: () => ({
-    chart: chart.path,
     stepId: 1,
     visitedSteps: []
   }),
@@ -56,16 +60,20 @@ export default {
   },
   computed: {
     ...mapState("metrics", ["flags"]),
+    ...mapState(["importedNaVN"]),
     currentStep() {
-      return getCurrentAvailableStep(this.stepId, this.flags, this.chart);
+      return getCurrentAvailableStep(this.stepId, this.flags, this.chart.path);
     },
     isEndOfRoute() {
       return this.currentStep && this.currentStep.next === null;
+    },
+    chart() {
+      return this.importedNaVN.find(vn => vn.meta.slug === this.slug);
     }
   },
   mounted() {
-    this.initFlags(chart.flags);
-    this.initAchievements(chart.achievements);
+    this.initFlags(this.chart.flags || []);
+    this.initAchievements(this.chart.achievements || []);
     this.visitedSteps.push(this.currentStep);
   },
   methods: {

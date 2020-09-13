@@ -5,9 +5,15 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: "/nav/:slug",
     name: "Navigation",
+    props: true,
     component: () => import("../views/Navigation.vue")
+  },
+  {
+    path: "/",
+    name: "Collection",
+    component: () => import("../views/Collection.vue")
   }
 ];
 
